@@ -16,9 +16,15 @@ def calculator(a: float, b: float) -> float:
     print("Tool called")
     return f"The sum of {a} and {b} is {a + b}."
 
+@tool
+def say_hello(name: str) -> str:
+    """Useful for when you need to say hello to someone."""
+    print("Tool called")
+    return f"Hello, {name}! How are you?"
+
 def main():
     model = ChatOpenAI(temperature=0)  # temperature=0 means deterministic
-    tools = [calculator]
+    tools = [calculator, say_hello]
     agent_executor = create_react_agent(model, tools)
 
     print("Hello, I'm your faitful AI agent! Type 'exit' to exit.")
