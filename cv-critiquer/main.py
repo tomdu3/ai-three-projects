@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Set up Streamlit UI
 st.set_page_config(
@@ -42,3 +41,30 @@ with st.form("form"):
     )
 
     # Upload CV
+
+# OpenAI API setup
+
+openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+uploaded_file = st.file_uploader(
+    "Upload yout CV (PDF or TXT)",
+    type=["pdf", "txt"]
+)
+
+job_role = st.text_input("Enter the job role you're applying for (optional)")
+
+analyze = st.button("Generate Critique")
+
+def extract_text_from_pdf(file):
+    pdf_reader = PyPDF2.PdfFileReader(file)
+    text = ""
+    for page in pdf_reader.pages:
+        text += page.extract_text() + "\n"
+    return text
+
+def extract_text_from_file(file):
+    if file.type == "application/pdf":
+        return extract_text_from_pdf(io.BytesIO(file.read()))
+    else:
+        return file.read().decode("utf-8")
+
