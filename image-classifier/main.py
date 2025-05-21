@@ -22,6 +22,9 @@ def preprocess_image(image):
 
 def classify_image(model, image):
     try:
+        # Ensure image is in RGB mode (discard alpha if present)
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
         processed_image = preprocess_image(image)
         predictions = model.predict(processed_image)
         # take numeric predictions and convert them to a list of labels
@@ -30,6 +33,7 @@ def classify_image(model, image):
     except Exception as e:
         st.error(f"Error classifying image: {str(e)}")
         return None
+
 
 def main():
     st.set_page_config(
